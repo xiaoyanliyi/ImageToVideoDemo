@@ -213,20 +213,30 @@ BOOL const DefaultTransitionShouldAnimate = YES;
 			if (i >= [array count]) {
 				buffer = NULL;
 			} else {
-				buffer = [HJImagesToVideo pixelBufferFromCGImage:[array[i] CGImage] size:DefaultFrameSize];
-                
                 CMTime fadeTime = CMTimeMake(DefaultShowPicSecond, fps*TransitionFrameCount);
 
-                for (double j = 0; j < FramesToWaitBeforeTransition; j++) {
+//                buffer = [HJImagesToVideo pixelBufferFromCGImage:[array[i] CGImage] size:DefaultFrameSize];
+//
+//                BOOL appendSuccess = [HJImagesToVideo appendToAdapter:adaptor
+//                                                          pixelBuffer:buffer
+//                                                               atTime:presentTime
+//                                                            withInput:writerInput];
+//
+//                presentTime = CMTimeAdd(presentTime, fadeTime);
+//                NSAssert(appendSuccess, @"Failed to append");
+                
+                for (int j = 0; j < FramesToWaitBeforeTransition; j++) {
                     
-                    buffer = [HJImagesToVideo crossScaleInFromImage:[array[i] CGImage] atSize:DefaultFrameSize scale:1.1];
+//                    buffer = [HJImagesToVideo crossScaleInFromImage:[array[i] CGImage]
+//                                                           fromSize:DefaultFrameSize
+//                                                             toSize:CGSizeMake(DefaultFrameSize.width * (1+j*0.001), DefaultFrameSize.height * (1+j*0.001))];
+                    buffer = [HJImagesToVideo pixelBufferFromCGImage:[array[i] CGImage] size:DefaultFrameSize];
                     
                     BOOL appendSuccess = [HJImagesToVideo appendToAdapter:adaptor
                                                               pixelBuffer:buffer
                                                                    atTime:presentTime
                                                                 withInput:writerInput];
                     presentTime = CMTimeAdd(presentTime, fadeTime);
-                    
                     NSAssert(appendSuccess, @"Failed to append");
                 }
 			}
@@ -256,17 +266,17 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                     
                     //Apply fade frames
                     //40-50 转场动画
-                    for (double j = 1; j < framesToFadeCount; j++) {
-                        
+                    for (double j = 0; j < framesToFadeCount; j++) {
+                    
 //                        buffer = [HJImagesToVideo crossFadeImage:[array[i] CGImage]
 //                                                         toImage:[array[i + 1] CGImage]
 //                                                          atSize:DefaultFrameSize
 //                                                       withAlpha:j/framesToFadeCount];
-                        
+                     
                         buffer = [HJImagesToVideo crossLeftToRightFromImage:[array[i] CGImage]
                                                                     toImage:[array[i + 1] CGImage]
                                                                      atSize:DefaultFrameSize
-                                                                  withframe:CGPointMake(j*(480/framesToFadeCount), j*(320/framesToFadeCount))];
+                                                                  withframe:CGPointMake(j*(DefaultFrameSize.width/framesToFadeCount), j*(DefaultFrameSize.height/framesToFadeCount))];
                         
                         BOOL appendSuccess = [HJImagesToVideo appendToAdapter:adaptor
                                                                   pixelBuffer:buffer
@@ -382,6 +392,19 @@ BOOL const DefaultTransitionShouldAnimate = YES;
     return pxbuffer;
 }
 
++ (CGImageRef)scaleImage:(CGImageRef)baseImage size:(CGSize)size{
+    //    新创建的位图上下文 newSize为其大小
+    UIGraphicsBeginImageContext(size);
+    //    对图片进行尺寸的改变
+    UIImage *image = [UIImage imageWithCGImage:baseImage];
+    [image drawInRect:CGRectMake(0,0,size.width,size.height)];
+    //    从当前上下文中获取一个UIImage对象  即获取新的图片对象
+    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage.CGImage;
+}
+
+
 + (CVPixelBufferRef)crossLeftToRightFromImage:(CGImageRef)baseImage
                                       toImage:(CGImageRef)fadeInImage
                                        atSize:(CGSize)imageSize
@@ -406,17 +429,21 @@ BOOL const DefaultTransitionShouldAnimate = YES;
     NSParameterAssert(context);
     
     CGRect drawRectBase = CGRectMake(0 + (imageSize.width-CGImageGetWidth(baseImage))/2,
-                                 (imageSize.height-CGImageGetHeight(baseImage))/2,
-                                 CGImageGetWidth(baseImage),
-                                 CGImageGetHeight(baseImage));
-    
+                                     (imageSize.height-CGImageGetHeight(baseImage))/2,
+                                     CGImageGetWidth(baseImage),
+                                     CGImageGetHeight(baseImage));
+
     CGContextDrawImage(context, drawRectBase, baseImage);
 
-    
+//    CGRect drawRectFadeInx = CGRectMake(-CGImageGetWidth(fadeInImage),
+//                                       (CGImageGetHeight(fadeInImage)-CGImageGetHeight(fadeInImage))/2,
+//                                       CGImageGetWidth(fadeInImage),
+//                                       CGImageGetHeight(fadeInImage));
+//
     CGRect drawRectFadeIn = CGRectMake(-imageSize.width,
-                                 (imageSize.height-CGImageGetHeight(baseImage))/2,
-                                 CGImageGetWidth(baseImage),
-                                 CGImageGetHeight(baseImage));
+                                 0,
+                                 imageSize.width,
+                                 imageSize.height);
     
     CGContextDrawImage(context, drawRectFadeIn, fadeInImage);
     
@@ -434,14 +461,14 @@ BOOL const DefaultTransitionShouldAnimate = YES;
 }
 
 + (CVPixelBufferRef)crossScaleInFromImage:(CGImageRef)baseImage
-                                   atSize:(CGSize)imageSize
-                                    scale:(CGFloat)scaleFloat
+                                 fromSize:(CGSize)fromImageSize
+                                   toSize:(CGSize)toImageSize
 {
     NSDictionary *options = @{(id)kCVPixelBufferCGImageCompatibilityKey: @YES,
                               (id)kCVPixelBufferCGBitmapContextCompatibilityKey: @YES};
     CVPixelBufferRef pxbuffer = NULL;
-    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault, imageSize.width,
-                                          imageSize.height, kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef) options,
+    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault, fromImageSize.width,
+                                          fromImageSize.height, kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef) options,
                                           &pxbuffer);
     NSParameterAssert(status == kCVReturnSuccess && pxbuffer != NULL);
     
@@ -450,13 +477,13 @@ BOOL const DefaultTransitionShouldAnimate = YES;
     NSParameterAssert(pxdata != NULL);
     
     CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef context = CGBitmapContextCreate(pxdata, imageSize.width,
-                                                 imageSize.height, 8, 4*imageSize.width, rgbColorSpace,
+    CGContextRef context = CGBitmapContextCreate(pxdata, fromImageSize.width,
+                                                 fromImageSize.height, 8, 4*fromImageSize.width, rgbColorSpace,
                                                  kCGImageAlphaNoneSkipFirst);
     NSParameterAssert(context);
     
-    CGRect drawRectBase = CGRectMake(0 + (imageSize.width-CGImageGetWidth(baseImage))/2,
-                                     (imageSize.height-CGImageGetHeight(baseImage))/2,
+    CGRect drawRectBase = CGRectMake(0 + (fromImageSize.width-CGImageGetWidth(baseImage))/2,
+                                     (fromImageSize.height-CGImageGetHeight(baseImage))/2,
                                      CGImageGetWidth(baseImage),
                                      CGImageGetHeight(baseImage));
     
@@ -464,7 +491,7 @@ BOOL const DefaultTransitionShouldAnimate = YES;
     
     
     CGContextBeginTransparencyLayer(context, nil);
-    CGContextScaleCTM(context, scaleFloat, scaleFloat);
+    CGContextScaleCTM(context, toImageSize.width/fromImageSize.width, toImageSize.width/fromImageSize.width);
     CGContextDrawImage(context, drawRectBase, baseImage);
     CGContextEndTransparencyLayer(context);
     
