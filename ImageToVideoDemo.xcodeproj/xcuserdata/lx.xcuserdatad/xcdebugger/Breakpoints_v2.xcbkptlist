@@ -20,28 +20,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ImageToVideoDemo/ViewController.m"
-            timestampString = "556702110.501864"
+            timestampString = "556712278.318936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "374"
             endingLineNumber = "374"
             landmarkName = "-testCompressionSession"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ImageToVideoDemo/HJImagesToVideo.m"
-            timestampString = "556702110.501943"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "450"
-            endingLineNumber = "450"
-            landmarkName = "+crossLeftToRightFromImage:toImage:atSize:withframe:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

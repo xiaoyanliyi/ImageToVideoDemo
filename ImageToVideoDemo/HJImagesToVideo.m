@@ -214,7 +214,7 @@ BOOL const DefaultTransitionShouldAnimate = YES;
 				buffer = NULL;
 			} else {
                 CMTime fadeTime = CMTimeMake(DefaultShowPicSecond, fps*TransitionFrameCount);
-
+                //画面不动
 //                buffer = [HJImagesToVideo pixelBufferFromCGImage:[array[i] CGImage] size:DefaultFrameSize];
 //
 //                BOOL appendSuccess = [HJImagesToVideo appendToAdapter:adaptor
@@ -224,13 +224,13 @@ BOOL const DefaultTransitionShouldAnimate = YES;
 //
 //                presentTime = CMTimeAdd(presentTime, fadeTime);
 //                NSAssert(appendSuccess, @"Failed to append");
-                
+                //缩放效果
                 for (int j = 0; j < FramesToWaitBeforeTransition; j++) {
                     
-//                    buffer = [HJImagesToVideo crossScaleInFromImage:[array[i] CGImage]
-//                                                           fromSize:DefaultFrameSize
-//                                                             toSize:CGSizeMake(DefaultFrameSize.width * (1+j*0.001), DefaultFrameSize.height * (1+j*0.001))];
-                    buffer = [HJImagesToVideo pixelBufferFromCGImage:[array[i] CGImage] size:DefaultFrameSize];
+                    buffer = [HJImagesToVideo crossScaleInFromImage:[array[i] CGImage]
+                                                           fromSize:DefaultFrameSize
+                                                              scale:(1+j*0.001)];
+//                    buffer = [HJImagesToVideo pixelBufferFromCGImage:[array[i] CGImage] size:DefaultFrameSize];
                     
                     BOOL appendSuccess = [HJImagesToVideo appendToAdapter:adaptor
                                                               pixelBuffer:buffer
@@ -242,25 +242,12 @@ BOOL const DefaultTransitionShouldAnimate = YES;
 			}
 			
 			if (buffer) {
-                //append buffer
-                
-//                BOOL appendSuccess = [HJImagesToVideo appendToAdapter:adaptor
-//                                                          pixelBuffer:buffer
-//                                                               atTime:presentTime
-//                                                            withInput:writerInput];
-//                NSAssert(appendSuccess, @"Failed to append");
-                
                 if (shouldAnimateTransitions && i + 1 < array.count) {
 
                     //0-40 画面不动
                     //Create time each fade frame is displayed
                     CMTime fadeTime = CMTimeMake(DefaultShowPicSecond, fps*TransitionFrameCount);
-//
-//                    //Add a delay, causing the base image to have more show time before fade begins.
-//                    for (int b = 0; b < FramesToWaitBeforeTransition; b++) {
-//                        presentTime = CMTimeAdd(presentTime, fadeTime);
-//                    }
-                    
+
                     //Adjust fadeFrameCount so that the number and curve of the fade frames and their alpha stay consistant
                     NSInteger framesToFadeCount = TransitionFrameCount - FramesToWaitBeforeTransition;
                     
@@ -276,7 +263,8 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                         buffer = [HJImagesToVideo crossLeftToRightFromImage:[array[i] CGImage]
                                                                     toImage:[array[i + 1] CGImage]
                                                                      atSize:DefaultFrameSize
-                                                                  withframe:CGPointMake(j*(DefaultFrameSize.width/framesToFadeCount), j*(DefaultFrameSize.height/framesToFadeCount))];
+                                                                  withframe:CGPointMake(j*(DefaultFrameSize.width/framesToFadeCount), j*(DefaultFrameSize.height/framesToFadeCount))
+                                                                  baseScale:1.04];
                         
                         BOOL appendSuccess = [HJImagesToVideo appendToAdapter:adaptor
                                                                   pixelBuffer:buffer
@@ -409,6 +397,7 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                                       toImage:(CGImageRef)fadeInImage
                                        atSize:(CGSize)imageSize
                                     withframe:(CGPoint)point
+                                    baseScale:(CGFloat)baseScaleFloat
 {
     NSDictionary *options = @{(id)kCVPixelBufferCGImageCompatibilityKey: @YES,
                               (id)kCVPixelBufferCGBitmapContextCompatibilityKey: @YES};
@@ -427,19 +416,16 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                                                  imageSize.height, 8, 4*imageSize.width, rgbColorSpace,
                                                  kCGImageAlphaNoneSkipFirst);
     NSParameterAssert(context);
-    
-    CGRect drawRectBase = CGRectMake(0 + (imageSize.width-CGImageGetWidth(baseImage))/2,
-                                     (imageSize.height-CGImageGetHeight(baseImage))/2,
+    CGContextSaveGState(context);
+    CGRect drawRectBase = CGRectMake(0,
+                                     0,
                                      CGImageGetWidth(baseImage),
                                      CGImageGetHeight(baseImage));
-
+    
+    CGContextScaleCTM(context, baseScaleFloat, baseScaleFloat);
     CGContextDrawImage(context, drawRectBase, baseImage);
-
-//    CGRect drawRectFadeInx = CGRectMake(-CGImageGetWidth(fadeInImage),
-//                                       (CGImageGetHeight(fadeInImage)-CGImageGetHeight(fadeInImage))/2,
-//                                       CGImageGetWidth(fadeInImage),
-//                                       CGImageGetHeight(fadeInImage));
-//
+    CGContextRestoreGState(context);
+    
     CGRect drawRectFadeIn = CGRectMake(-imageSize.width,
                                  0,
                                  imageSize.width,
@@ -449,6 +435,12 @@ BOOL const DefaultTransitionShouldAnimate = YES;
     
     CGContextBeginTransparencyLayer(context, nil);
     CGContextTranslateCTM(context, point.x, 0);
+    
+    CGContextSaveGState(context);
+    CGContextScaleCTM(context, baseScaleFloat, baseScaleFloat);
+    CGContextDrawImage(context, drawRectBase, baseImage);
+    CGContextRestoreGState(context);
+    
     CGContextDrawImage(context, drawRectFadeIn, fadeInImage);
     CGContextEndTransparencyLayer(context);
     
@@ -462,7 +454,7 @@ BOOL const DefaultTransitionShouldAnimate = YES;
 
 + (CVPixelBufferRef)crossScaleInFromImage:(CGImageRef)baseImage
                                  fromSize:(CGSize)fromImageSize
-                                   toSize:(CGSize)toImageSize
+                                    scale:(CGFloat)scaleFloat
 {
     NSDictionary *options = @{(id)kCVPixelBufferCGImageCompatibilityKey: @YES,
                               (id)kCVPixelBufferCGBitmapContextCompatibilityKey: @YES};
@@ -491,7 +483,7 @@ BOOL const DefaultTransitionShouldAnimate = YES;
     
     
     CGContextBeginTransparencyLayer(context, nil);
-    CGContextScaleCTM(context, toImageSize.width/fromImageSize.width, toImageSize.width/fromImageSize.width);
+    CGContextScaleCTM(context, scaleFloat, scaleFloat);
     CGContextDrawImage(context, drawRectBase, baseImage);
     CGContextEndTransparencyLayer(context);
     
