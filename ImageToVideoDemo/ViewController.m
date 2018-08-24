@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "HJImagesToVideo.h"
+#import "LXImagesToVideo.h"
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVKit/AVKit.h>
@@ -65,7 +65,7 @@
     self.HJOutputPath =[[pathOutput objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat:@"HJoutput_%@.mov",[NSDate date]]];
     
     //图片合成视频
-    [HJImagesToVideo videoFromImages:imageArray
+    [LXImagesToVideo videoFromImages:imageArray
                               toPath:self.HJVideoPath
                   animateTransitions:YES
                    withCallbackBlock:^(BOOL success) {
@@ -80,7 +80,7 @@
     
     
     
-//    [HJImagesToVideo saveVideoToPhotosWithImages:imageArray
+//    [LXImagesToVideo saveVideoToPhotosWithImages:imageArray
 //                              animateTransitions:YES
 //                               withCallbackBlock:^(BOOL success) {
 //                                   if (success) {

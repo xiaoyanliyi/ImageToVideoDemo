@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E9809549212FEB7D0022C3C6 /* LXImagesToVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = E9809547212FE9880022C3C6 /* LXImagesToVideo.m */; };
 		E9D9E3CF212677A4008B8B7A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D9E3CE212677A4008B8B7A /* AppDelegate.m */; };
 		E9D9E3D2212677A4008B8B7A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D9E3D1212677A4008B8B7A /* ViewController.m */; };
 		E9D9E3D5212677A4008B8B7A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E9D9E3D3212677A4008B8B7A /* Main.storyboard */; };
@@ -27,7 +28,6 @@
 		E9D9E41521267B14008B8B7A /* IMG_4347.JPG in Resources */ = {isa = PBXBuildFile; fileRef = E9D9E40921267B14008B8B7A /* IMG_4347.JPG */; };
 		E9D9E41621267B14008B8B7A /* IMG_4345.JPG in Resources */ = {isa = PBXBuildFile; fileRef = E9D9E40A21267B14008B8B7A /* IMG_4345.JPG */; };
 		E9D9E41721267B14008B8B7A /* IMG_4342.JPG in Resources */ = {isa = PBXBuildFile; fileRef = E9D9E40B21267B14008B8B7A /* IMG_4342.JPG */; };
-		E9D9E41A2126D2AD008B8B7A /* HJImagesToVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D9E4182126D2AD008B8B7A /* HJImagesToVideo.m */; };
 		E9D9E41D2126D3FB008B8B7A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9D9E41C2126D3FB008B8B7A /* CoreGraphics.framework */; };
 		E9D9E41F2126D40C008B8B7A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9D9E41E2126D40C008B8B7A /* UIKit.framework */; };
 		E9D9E4212126D414008B8B7A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9D9E4202126D413008B8B7A /* Foundation.framework */; };
@@ -52,6 +52,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E9809546212FE9880022C3C6 /* LXImagesToVideo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LXImagesToVideo.h; sourceTree = "<group>"; };
+		E9809547212FE9880022C3C6 /* LXImagesToVideo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LXImagesToVideo.m; sourceTree = "<group>"; };
 		E9D9E3CA212677A4008B8B7A /* ImageToVideoDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageToVideoDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9D9E3CD212677A4008B8B7A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E9D9E3CE212677A4008B8B7A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -80,8 +82,6 @@
 		E9D9E40921267B14008B8B7A /* IMG_4347.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IMG_4347.JPG; sourceTree = "<group>"; };
 		E9D9E40A21267B14008B8B7A /* IMG_4345.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IMG_4345.JPG; sourceTree = "<group>"; };
 		E9D9E40B21267B14008B8B7A /* IMG_4342.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IMG_4342.JPG; sourceTree = "<group>"; };
-		E9D9E4182126D2AD008B8B7A /* HJImagesToVideo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HJImagesToVideo.m; sourceTree = "<group>"; };
-		E9D9E4192126D2AD008B8B7A /* HJImagesToVideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HJImagesToVideo.h; sourceTree = "<group>"; };
 		E9D9E41C2126D3FB008B8B7A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		E9D9E41E2126D40C008B8B7A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E9D9E4202126D413008B8B7A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -145,8 +145,8 @@
 				E9D9E3CE212677A4008B8B7A /* AppDelegate.m */,
 				E9D9E3D0212677A4008B8B7A /* ViewController.h */,
 				E9D9E3D1212677A4008B8B7A /* ViewController.m */,
-				E9D9E4192126D2AD008B8B7A /* HJImagesToVideo.h */,
-				E9D9E4182126D2AD008B8B7A /* HJImagesToVideo.m */,
+				E9809546212FE9880022C3C6 /* LXImagesToVideo.h */,
+				E9809547212FE9880022C3C6 /* LXImagesToVideo.m */,
 				E9D9E3D3212677A4008B8B7A /* Main.storyboard */,
 				E9D9E3D6212677A6008B8B7A /* Assets.xcassets */,
 				E9D9E3D8212677A6008B8B7A /* LaunchScreen.storyboard */,
@@ -347,9 +347,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9809549212FEB7D0022C3C6 /* LXImagesToVideo.m in Sources */,
 				E9D9E3D2212677A4008B8B7A /* ViewController.m in Sources */,
 				E9D9E3DD212677A6008B8B7A /* main.m in Sources */,
-				E9D9E41A2126D2AD008B8B7A /* HJImagesToVideo.m in Sources */,
 				E9D9E3CF212677A4008B8B7A /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
