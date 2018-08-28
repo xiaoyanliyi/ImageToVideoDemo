@@ -278,15 +278,15 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                     //40-50 转场动画
                     for (double j = 0; j < crossTransition; j++) {
 //                        if (i <= 1) {
-                            CGRect baseFrame = CGRectMake(0, 0, DefaultFrameSize.width, DefaultFrameSize.height);
-                            CGRect toFrame = CGRectMake(-DefaultFrameSize.width * 0.04 / 2, -DefaultFrameSize.height * 0.04 / 2, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
-                        
-                            buffer = [LXImagesToVideo crossFadeImage:[array[i] CGImage]
-                                                             toImage:[array[i + 1] CGImage]
-                                                              atSize:DefaultFrameSize
-                                                           baseFrame:baseFrame
-                                                             toframe:toFrame
-                                                                 ctm:j];
+//                            CGRect baseFrame = CGRectMake(0, 0, DefaultFrameSize.width, DefaultFrameSize.height);
+//                            CGRect toFrame = CGRectMake(-DefaultFrameSize.width * 0.04 / 2, -DefaultFrameSize.height * 0.04 / 2, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
+//
+//                            buffer = [LXImagesToVideo crossFadeImage:[array[i] CGImage]
+//                                                             toImage:[array[i + 1] CGImage]
+//                                                              atSize:DefaultFrameSize
+//                                                           baseFrame:baseFrame
+//                                                             toframe:toFrame
+//                                                                 ctm:j];
 //                        }
 //                        else if (i == 2) {
                         
@@ -312,6 +312,20 @@ BOOL const DefaultTransitionShouldAnimate = YES;
 //                                                             baseScale:1.04
 //                                                               toScale:1.04
 //                                                                  zoom:j];
+                        
+                        
+                            CGRect baseFrame = CGRectMake(0, 0, DefaultFrameSize.width, DefaultFrameSize.height);
+                            CGRect toFrame = CGRectMake(0, 0, DefaultFrameSize.width, DefaultFrameSize.height);
+                        
+                            buffer = [LXImagesToVideo crossTopRotateFromImage:[array[i] CGImage]
+                                                                      toImage:[array[i + 1] CGImage]
+                                                                       atSize:DefaultFrameSize
+                                                                    baseFrame:baseFrame
+                                                                      toframe:toFrame
+                                                                          ctm:j];
+
+                        
+                        
 //                        }
 
                         BOOL appendSuccess = [LXImagesToVideo appendToAdapter:adaptor
@@ -424,10 +438,6 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                                                  kCGImageAlphaNoneSkipFirst);
     NSParameterAssert(context);
     
-//    CGRect drawRectBase = CGRectMake(0 + (fromImageSize.width-CGImageGetWidth(baseImage))/2,
-//                                     (fromImageSize.height-CGImageGetHeight(baseImage))/2,
-//                                     CGImageGetWidth(baseImage),
-//                                     CGImageGetHeight(baseImage));
     CGRect drawRect;
     if (baseFrame.size.width > toFrame.size.width) { //缩小效果
         drawRect = CGRectMake((baseFrame.origin.x - toFrame.origin.x) / FramesToWaitBeforeTransition * (FramesToWaitBeforeTransition - ctm),
@@ -442,15 +452,7 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                               (baseFrame.size.height - toFrame.size.height) / FramesToWaitBeforeTransition * ctm + toFrame.size.height);
     }
     
-    
-//    CGContextSaveGState(context);
-//    CGContextScaleCTM(context, fromScaleFloat, fromScaleFloat);
-//    CGContextDrawImage(context, drawRectBase, baseImage);
-//    CGContextRestoreGState(context);
-    
-    
     CGContextBeginTransparencyLayer(context, nil);
-//    CGContextScaleCTM(context, toScaleFloat, toScaleFloat);
     CGContextDrawImage(context, drawRect, baseImage);
     CGContextEndTransparencyLayer(context);
     
@@ -488,12 +490,6 @@ BOOL const DefaultTransitionShouldAnimate = YES;
     
     CGRect drawRectBase = baseFrame;
     
-//    CGContextSaveGState(context);
-//    CGContextScaleCTM(context, baseScaleFloat, baseScaleFloat);
-//    CGContextDrawImage(context, drawRectBase, baseImage);
-//    CGContextRestoreGState(context);
-//
-//
     CGContextBeginTransparencyLayer(context, nil);
     CGContextTranslateCTM(context, (toFrame.origin.x - baseFrame.origin.x)/FramesToWaitBeforeTransition*ctm, (toFrame.origin.y - baseFrame.origin.y)/FramesToWaitBeforeTransition*ctm);
     
@@ -540,16 +536,8 @@ BOOL const DefaultTransitionShouldAnimate = YES;
     
     CGRect drawRectFadeIn = toFrame;
     
-//    CGContextSaveGState(context);
-//    CGContextScaleCTM(context, 1, 1);
-//    CGContextDrawImage(context, drawRectBase, baseImage);
-//    CGContextRestoreGState(context);
-    
     CGContextDrawImage(context, drawRectBase, baseImage);
-//    CGContextDrawImage(context, drawRectFadeIn, fadeInImage);
-
-    
-    
+   
     CGContextBeginTransparencyLayer(context, nil);
     CGContextSetAlpha(context, (CGFloat)ctm/crossTransition);
     CGContextScaleCTM(context, 1, 1);
@@ -599,10 +587,7 @@ BOOL const DefaultTransitionShouldAnimate = YES;
     CGContextBeginTransparencyLayer(context, nil);
     CGContextTranslateCTM(context, ((toFrame.size.width - baseFrame.size.width) / 2 + baseFrame.size.width) / crossTransition * (ctm+1), 0);
     
-//    CGContextSaveGState(context);
-//    CGContextScaleCTM(context, baseScaleFloat, baseScaleFloat);
     CGContextDrawImage(context, drawRectBase, baseImage);
-//    CGContextRestoreGState(context);
     
     CGContextDrawImage(context, drawRectFadeIn, fadeInImage);
     CGContextEndTransparencyLayer(context);
@@ -649,13 +634,60 @@ BOOL const DefaultTransitionShouldAnimate = YES;
     CGRect drawRectFadeIn = toFrame;
     
     CGContextSaveGState(context);
-//    CGContextScaleCTM(context, toScaleFloat, toScaleFloat);
     CGContextDrawImage(context, drawRectFadeIn, fadeInImage);
     CGContextRestoreGState(context);
     
     CGContextBeginTransparencyLayer(context, nil);
     CGContextScaleCTM(context, baseScaleFloat, baseScaleFloat);
     CGContextDrawImage(context, drawRectBase, baseImage);
+    CGContextEndTransparencyLayer(context);
+    
+    CGColorSpaceRelease(rgbColorSpace);
+    CGContextRelease(context);
+    
+    CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
+    
+    return pxbuffer;
+}
+
++ (CVPixelBufferRef)crossTopRotateFromImage:(CGImageRef)baseImage
+                                    toImage:(CGImageRef)fadeInImage
+                                     atSize:(CGSize)imageSize
+                                  baseFrame:(CGRect)baseFrame
+                                    toframe:(CGRect)toFrame
+                                        ctm:(NSInteger)ctm
+{
+    NSDictionary *options = @{(id)kCVPixelBufferCGImageCompatibilityKey: @YES,
+                              (id)kCVPixelBufferCGBitmapContextCompatibilityKey: @YES};
+    CVPixelBufferRef pxbuffer = NULL;
+    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault, imageSize.width,
+                                          imageSize.height, kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef) options,
+                                          &pxbuffer);
+    NSParameterAssert(status == kCVReturnSuccess && pxbuffer != NULL);
+    
+    CVPixelBufferLockBaseAddress(pxbuffer, 0);
+    void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
+    NSParameterAssert(pxdata != NULL);
+    
+    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(pxdata, imageSize.width,
+                                                 imageSize.height, 8, 4*imageSize.width, rgbColorSpace,
+                                                 kCGImageAlphaNoneSkipFirst);
+    NSParameterAssert(context);
+    
+    CGRect drawRectBase = baseFrame;
+    CGRect drawRectFadeIn = CGRectMake(-toFrame.size.width/2, -toFrame.size.height, toFrame.size.width, toFrame.size.height);
+    
+    CGContextDrawImage(context, drawRectBase, baseImage);
+    
+    CGContextTranslateCTM(context, imageSize.width/2, imageSize.height);
+    CGContextRotateCTM(context, (180 * M_PI / 180));
+
+    CGContextBeginTransparencyLayer(context, nil);
+    
+    CGContextRotateCTM(context, (-180 * M_PI / 180) * ((CGFloat)ctm / crossTransition));
+    
+    CGContextDrawImage(context, drawRectFadeIn, fadeInImage);
     CGContextEndTransparencyLayer(context);
     
     CGColorSpaceRelease(rgbColorSpace);
