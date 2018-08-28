@@ -40,8 +40,7 @@
     
     NSArray *imageArr = @[[UIImage imageNamed:@"IMG_4340.JPG"],[UIImage imageNamed:@"IMG_4341.JPG"],[UIImage imageNamed:@"IMG_4342.JPG"],
                           [UIImage imageNamed:@"IMG_4343.JPG"],[UIImage imageNamed:@"IMG_4344.JPG"],[UIImage imageNamed:@"IMG_4345.JPG"],
-                          [UIImage imageNamed:@"IMG_4346.JPG"],[UIImage imageNamed:@"IMG_4347.JPG"],[UIImage imageNamed:@"IMG_4348.JPG"],
-                          [UIImage imageNamed:@"IMG_4349.JPG"],[UIImage imageNamed:@"IMG_4350.JPG"]];
+                          [UIImage imageNamed:@"IMG_4346.JPG"]];
 
     
     for (int i = 0; i<imageArr.count; i++) {
@@ -77,7 +76,6 @@
                            NSLog(@"Failed");
                        }
                    }];
-    
     
     
 //    [LXImagesToVideo saveVideoToPhotosWithImages:imageArray
@@ -266,6 +264,9 @@
 //            theMovie.moviePlayer.movieSourceType=MPMovieSourceTypeFile;
 //            [theMovie.moviePlayer play];
 //        });
+        //保存至相册
+        UISaveVideoAtPathToSavedPhotosAlbum(self.HJOutputPath, self, nil, nil);
+
      }];
     NSLog(@"完成！输出路径==%@",outputFileUrl);
 

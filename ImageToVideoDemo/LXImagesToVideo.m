@@ -227,7 +227,7 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                 //0-40 播放图片
                 for (int j = 0; j < FramesToWaitBeforeTransition; j++) {
                     
-//                    if (i <= 2) {//缩小效果
+                    if (i == 0) {//缩小效果
                     
                         CGRect baseFrame = CGRectMake(-DefaultFrameSize.width * 0.04 / 2, -DefaultFrameSize.height * 0.04 / 2, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
                         CGRect toFrame = CGRectMake(0, 0, DefaultFrameSize.width, DefaultFrameSize.height);
@@ -237,29 +237,58 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                                                              baseFrame:baseFrame
                                                                toFrame:toFrame
                                                                    ctm:j];
-//                    }
-//                    else if (i <= 4){ //放大效果
-//                        CGRect baseFrame = CGRectMake(0, 0, DefaultFrameSize.width, DefaultFrameSize.height);
-//                        CGRect toFrame = CGRectMake(-DefaultFrameSize.width * 0.04 / 2, -DefaultFrameSize.height * 0.04 / 2, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
-//
-//                        buffer = [LXImagesToVideo playScaleInFromImage:[array[i] CGImage]
-//                                                          fromSize:DefaultFrameSize
-//                                                         baseFrame:baseFrame
-//                                                           toFrame:toFrame
-//                                                               ctm:j];
-//                    }
-//                    else {
-//                        CGRect baseFrame = CGRectMake(-DefaultFrameSize.width*0.04, 0, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
-//                        CGRect toFrame = CGRectMake(0, 0, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
-//
-//                        buffer = [LXImagesToVideo playLeftToRightFromImage:[array[i] CGImage]
-//                                                                    atSize:DefaultFrameSize
-//                                                                 baseFrame:baseFrame
-//                                                                   toFrame:toFrame
-//                                                                       ctm:j];
-                    
-//                    }
-                    
+                    }
+                    else if (i == 1){ //放大效果
+                        CGRect baseFrame = CGRectMake(0, 0, DefaultFrameSize.width, DefaultFrameSize.height);
+                        CGRect toFrame = CGRectMake(-DefaultFrameSize.width * 0.04 / 2, -DefaultFrameSize.height * 0.04 / 2, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
+
+                        buffer = [LXImagesToVideo playScaleInFromImage:[array[i] CGImage]
+                                                              fromSize:DefaultFrameSize
+                                                             baseFrame:baseFrame
+                                                               toFrame:toFrame
+                                                                   ctm:j];
+                    }
+                    else if (i == 2) {//左到右平移
+                        CGRect baseFrame = CGRectMake(-DefaultFrameSize.width*0.04, 0, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
+                        CGRect toFrame = CGRectMake(0, 0, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
+
+                        buffer = [LXImagesToVideo playMoveFromImage:[array[i] CGImage]
+                                                             atSize:DefaultFrameSize
+                                                          baseFrame:baseFrame
+                                                            toFrame:toFrame
+                                                                ctm:j];
+                    }
+                    else if (i == 3) {//右到左平移
+                        CGRect baseFrame = CGRectMake(0, 0, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
+                        CGRect toFrame = CGRectMake(-DefaultFrameSize.width*0.04, 0, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
+                        
+                        buffer = [LXImagesToVideo playMoveFromImage:[array[i] CGImage]
+                                                             atSize:DefaultFrameSize
+                                                          baseFrame:baseFrame
+                                                            toFrame:toFrame
+                                                                ctm:j];
+                    }
+                    else if (i == 4) {  //上到下平移
+                        CGRect baseFrame = CGRectMake(0, 0, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
+                        CGRect toFrame = CGRectMake(0, -DefaultFrameSize.height*0.04, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
+                        
+                        buffer = [LXImagesToVideo playMoveFromImage:[array[i] CGImage]
+                                                             atSize:DefaultFrameSize
+                                                          baseFrame:baseFrame
+                                                            toFrame:toFrame
+                                                                ctm:j];
+                    }
+                    else {  //下到上平移
+                        CGRect baseFrame = CGRectMake(0, -DefaultFrameSize.height*0.04, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
+                        CGRect toFrame = CGRectMake(0, 0, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
+                        
+                        buffer = [LXImagesToVideo playMoveFromImage:[array[i] CGImage]
+                                                             atSize:DefaultFrameSize
+                                                          baseFrame:baseFrame
+                                                            toFrame:toFrame
+                                                                ctm:j];
+                        
+                    }
                     
                     
                     BOOL appendSuccess = [LXImagesToVideo appendToAdapter:adaptor
@@ -277,45 +306,55 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                     
                     //40-50 转场动画
                     for (double j = 0; j < crossTransition; j++) {
-//                        if (i <= 1) {
-//                            CGRect baseFrame = CGRectMake(0, 0, DefaultFrameSize.width, DefaultFrameSize.height);
-//                            CGRect toFrame = CGRectMake(-DefaultFrameSize.width * 0.04 / 2, -DefaultFrameSize.height * 0.04 / 2, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
-//
-//                            buffer = [LXImagesToVideo crossFadeImage:[array[i] CGImage]
-//                                                             toImage:[array[i + 1] CGImage]
-//                                                              atSize:DefaultFrameSize
-//                                                           baseFrame:baseFrame
-//                                                             toframe:toFrame
-//                                                                 ctm:j];
-//                        }
-//                        else if (i == 2) {
-                        
-//                            CGRect baseFrame = CGRectMake(0, 0, DefaultFrameSize.width, DefaultFrameSize.height);
-//                            CGRect toFrame = CGRectMake(-DefaultFrameSize.width * 0.04 / 2, -DefaultFrameSize.height * 0.04 / 2, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
-//
-//                            buffer = [LXImagesToVideo crossLeftToRightFromImage:[array[i] CGImage]
-//                                                                        toImage:[array[i + 1] CGImage]
-//                                                                         atSize:DefaultFrameSize
-//                                                                      baseFrame:baseFrame
-//                                                                        toframe:toFrame
-//                                                                            ctm:j];
-//                        }
-//                        else {
-//
-//
-//                            CGRect toFrame = CGRectMake(-DefaultFrameSize.width*0.04, 0, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
-//
-//                            buffer = [LXImagesToVideo crossZoomInImage:[array[i] CGImage]
-//                                                               toImage:[array[i + 1] CGImage]
-//                                                                atSize:DefaultFrameSize
-//                                                               toframe:toFrame
-//                                                             baseScale:1.04
-//                                                               toScale:1.04
-//                                                                  zoom:j];
-                        
-                        
+                        if (i == 0) {
                             CGRect baseFrame = CGRectMake(0, 0, DefaultFrameSize.width, DefaultFrameSize.height);
                             CGRect toFrame = CGRectMake(0, 0, DefaultFrameSize.width, DefaultFrameSize.height);
+
+                            buffer = [LXImagesToVideo crossFadeImage:[array[i] CGImage]
+                                                             toImage:[array[i + 1] CGImage]
+                                                              atSize:DefaultFrameSize
+                                                           baseFrame:baseFrame
+                                                             toframe:toFrame
+                                                                 ctm:j];
+                        }
+                        else if (i == 1) {
+                            CGRect baseFrame = CGRectMake(-DefaultFrameSize.width * 0.04 / 2, -DefaultFrameSize.height * 0.04 / 2, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
+                            CGRect toFrame = CGRectMake(-DefaultFrameSize.width*0.04, 0, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);;
+
+                            buffer = [LXImagesToVideo crossLeftToRightFromImage:[array[i] CGImage]
+                                                                        toImage:[array[i + 1] CGImage]
+                                                                         atSize:DefaultFrameSize
+                                                                      baseFrame:baseFrame
+                                                                        toframe:toFrame
+                                                                            ctm:j];
+                        }
+                        else if (i == 2) {
+                            CGRect baseFrame = CGRectMake(0, 0, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
+                            CGRect toFrame = CGRectMake(0, 0, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
+
+                            buffer = [LXImagesToVideo crossZoomOutImage:[array[i] CGImage]
+                                                                toImage:[array[i + 1] CGImage]
+                                                                 atSize:DefaultFrameSize
+                                                              baseFrame:baseFrame
+                                                                toframe:toFrame
+                                                                   zoom:j];
+                        
+                        }
+                        else if (i == 3) {
+                            CGRect baseFrame = CGRectMake(-DefaultFrameSize.width*0.04, 0, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
+                            CGRect toFrame = CGRectMake(0, 0, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
+                            
+                            buffer = [LXImagesToVideo crossZoomInImage:[array[i] CGImage]
+                                                               toImage:[array[i + 1] CGImage]
+                                                                atSize:DefaultFrameSize
+                                                             baseFrame:baseFrame
+                                                               toframe:toFrame
+                                                                  zoom:j];
+                            
+                        }
+                        else if (i == 4) {
+                            CGRect baseFrame = CGRectMake(0, -DefaultFrameSize.height*0.04, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
+                            CGRect toFrame = CGRectMake(0, -DefaultFrameSize.height*0.04, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
                         
                             buffer = [LXImagesToVideo crossTopRotateFromImage:[array[i] CGImage]
                                                                       toImage:[array[i + 1] CGImage]
@@ -323,10 +362,18 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                                                                     baseFrame:baseFrame
                                                                       toframe:toFrame
                                                                           ctm:j];
-
-                        
-                        
-//                        }
+                        }
+                        else {
+                            CGRect baseFrame = CGRectMake(0, 0, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
+                            CGRect toFrame = CGRectMake(0, -DefaultFrameSize.height*0.04, DefaultFrameSize.width * 1.04, DefaultFrameSize.height * 1.04);
+                            
+                            buffer = [LXImagesToVideo crossTopRotateFromImage:[array[i] CGImage]
+                                                                      toImage:[array[i + 1] CGImage]
+                                                                       atSize:DefaultFrameSize
+                                                                    baseFrame:baseFrame
+                                                                      toframe:toFrame
+                                                                          ctm:j];
+                        }
 
                         BOOL appendSuccess = [LXImagesToVideo appendToAdapter:adaptor
                                                                   pixelBuffer:buffer
@@ -446,10 +493,10 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                               (baseFrame.size.height - toFrame.size.height) / FramesToWaitBeforeTransition * (FramesToWaitBeforeTransition - ctm) + toFrame.size.height);
     }
     else { //放大
-        drawRect = CGRectMake((baseFrame.origin.x - toFrame.origin.x) / FramesToWaitBeforeTransition * ctm,
-                              (baseFrame.origin.y - toFrame.origin.y) / FramesToWaitBeforeTransition * ctm,
-                              (baseFrame.size.width - toFrame.size.width) / FramesToWaitBeforeTransition * ctm + toFrame.size.width,
-                              (baseFrame.size.height - toFrame.size.height) / FramesToWaitBeforeTransition * ctm + toFrame.size.height);
+        drawRect = CGRectMake((toFrame.origin.x - baseFrame.origin.x) / FramesToWaitBeforeTransition * ctm,
+                              (toFrame.origin.y - baseFrame.origin.y) / FramesToWaitBeforeTransition * ctm,
+                              (toFrame.size.width - baseFrame.size.width) / FramesToWaitBeforeTransition * ctm + baseFrame.size.width,
+                              (toFrame.size.height - baseFrame.size.height) / FramesToWaitBeforeTransition * ctm + baseFrame.size.height);
     }
     
     CGContextBeginTransparencyLayer(context, nil);
@@ -464,7 +511,46 @@ BOOL const DefaultTransitionShouldAnimate = YES;
     return pxbuffer;
 }
 
-+ (CVPixelBufferRef)playLeftToRightFromImage:(CGImageRef)baseImage
++ (CVPixelBufferRef)playMoveFromImage:(CGImageRef)baseImage
+                               atSize:(CGSize)imageSize
+                            baseFrame:(CGRect)baseFrame
+                              toFrame:(CGRect)toFrame
+                                  ctm:(NSInteger)ctm
+{
+    NSDictionary *options = @{(id)kCVPixelBufferCGImageCompatibilityKey: @YES,
+                              (id)kCVPixelBufferCGBitmapContextCompatibilityKey: @YES};
+    CVPixelBufferRef pxbuffer = NULL;
+    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault, imageSize.width,
+                                          imageSize.height, kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef) options,
+                                          &pxbuffer);
+    NSParameterAssert(status == kCVReturnSuccess && pxbuffer != NULL);
+    
+    CVPixelBufferLockBaseAddress(pxbuffer, 0);
+    void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
+    NSParameterAssert(pxdata != NULL);
+    
+    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(pxdata, imageSize.width,
+                                                 imageSize.height, 8, 4*imageSize.width, rgbColorSpace,
+                                                 kCGImageAlphaNoneSkipFirst);
+    NSParameterAssert(context);
+    
+    CGRect drawRectBase = baseFrame;
+    
+    CGContextBeginTransparencyLayer(context, nil);
+    CGContextTranslateCTM(context, (toFrame.origin.x - baseFrame.origin.x) / FramesToWaitBeforeTransition * ctm, (toFrame.origin.y - baseFrame.origin.y) /FramesToWaitBeforeTransition * ctm);
+    CGContextDrawImage(context, drawRectBase, baseImage);
+    CGContextEndTransparencyLayer(context);
+    
+    CGColorSpaceRelease(rgbColorSpace);
+    CGContextRelease(context);
+    
+    CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
+    
+    return pxbuffer;
+}
+
++ (CVPixelBufferRef)playTopToBottomFromImage:(CGImageRef)baseImage
                                       atSize:(CGSize)imageSize
                                    baseFrame:(CGRect)baseFrame
                                      toFrame:(CGRect)toFrame
@@ -585,7 +671,7 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                                        toFrame.size.height);
     
     CGContextBeginTransparencyLayer(context, nil);
-    CGContextTranslateCTM(context, ((toFrame.size.width - baseFrame.size.width) / 2 + baseFrame.size.width) / crossTransition * (ctm+1), 0);
+    CGContextTranslateCTM(context, (toFrame.size.width + toFrame.origin.x) / crossTransition * ctm, 0);
     
     CGContextDrawImage(context, drawRectBase, baseImage);
     
@@ -600,12 +686,59 @@ BOOL const DefaultTransitionShouldAnimate = YES;
     return pxbuffer;
 }
 
+//缩小
++ (CVPixelBufferRef)crossZoomOutImage:(CGImageRef)baseImage
+                              toImage:(CGImageRef)fadeInImage
+                               atSize:(CGSize)imageSize
+                            baseFrame:(CGRect)baseFrame
+                              toframe:(CGRect)toFrame
+                                 zoom:(NSInteger)zoom //缩放系数 帧率
+{
+    NSDictionary *options = @{(id)kCVPixelBufferCGImageCompatibilityKey: @YES,
+                              (id)kCVPixelBufferCGBitmapContextCompatibilityKey: @YES};
+    CVPixelBufferRef pxbuffer = NULL;
+    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault, imageSize.width,
+                                          imageSize.height, kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef) options,
+                                          &pxbuffer);
+    NSParameterAssert(status == kCVReturnSuccess && pxbuffer != NULL);
+    
+    CVPixelBufferLockBaseAddress(pxbuffer, 0);
+    void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
+    NSParameterAssert(pxdata != NULL);
+    
+    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(pxdata, imageSize.width,
+                                                 imageSize.height, 8, 4*imageSize.width, rgbColorSpace,
+                                                 kCGImageAlphaNoneSkipFirst);
+    NSParameterAssert(context);
+    
+    CGRect drawRectBase = CGRectMake(baseFrame.size.width / 2 * ((CGFloat)zoom / crossTransition),
+                                     baseFrame.size.height / 2 * ((CGFloat)zoom / crossTransition),
+                                     baseFrame.size.width * ((CGFloat)(crossTransition - zoom) / crossTransition),
+                                     baseFrame.size.height * ((CGFloat)(crossTransition - zoom) / crossTransition));
+    
+    CGRect drawRectFadeIn = toFrame;
+    
+    CGContextDrawImage(context, drawRectFadeIn, fadeInImage);
+    
+    CGContextBeginTransparencyLayer(context, nil);
+    CGContextDrawImage(context, drawRectBase, baseImage);
+    CGContextEndTransparencyLayer(context);
+    
+    CGColorSpaceRelease(rgbColorSpace);
+    CGContextRelease(context);
+    
+    CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
+    
+    return pxbuffer;
+}
+
+//放大
 + (CVPixelBufferRef)crossZoomInImage:(CGImageRef)baseImage
                              toImage:(CGImageRef)fadeInImage
                               atSize:(CGSize)imageSize
+                           baseFrame:(CGRect)baseFrame
                              toframe:(CGRect)toFrame
-                           baseScale:(CGFloat)baseScaleFloat
-                             toScale:(CGFloat)toScaleFloat
                                 zoom:(NSInteger)zoom //缩放系数 帧率
 {
     NSDictionary *options = @{(id)kCVPixelBufferCGImageCompatibilityKey: @YES,
@@ -626,20 +759,17 @@ BOOL const DefaultTransitionShouldAnimate = YES;
                                                  kCGImageAlphaNoneSkipFirst);
     NSParameterAssert(context);
     
-    CGRect drawRectBase = CGRectMake((imageSize.width / 2) * ((CGFloat)zoom / crossTransition),
-                                     (imageSize.height / 2) * ((CGFloat)zoom / crossTransition),
-                                     imageSize.width * ((CGFloat)(crossTransition - zoom) / crossTransition),
-                                     imageSize.height * ((CGFloat)(crossTransition - zoom) / crossTransition));
+    CGRect drawRectBase = baseFrame;
     
-    CGRect drawRectFadeIn = toFrame;
+    CGRect drawRectFadeIn = CGRectMake(baseFrame.size.width / 2 * ((CGFloat)(crossTransition - zoom) / crossTransition),
+                                       baseFrame.size.height / 2 * ((CGFloat)(crossTransition - zoom) / crossTransition),
+                                       baseFrame.size.width * ((CGFloat)zoom / crossTransition),
+                                       baseFrame.size.height * ((CGFloat)zoom / crossTransition));;
     
-    CGContextSaveGState(context);
-    CGContextDrawImage(context, drawRectFadeIn, fadeInImage);
-    CGContextRestoreGState(context);
-    
-    CGContextBeginTransparencyLayer(context, nil);
-    CGContextScaleCTM(context, baseScaleFloat, baseScaleFloat);
     CGContextDrawImage(context, drawRectBase, baseImage);
+
+    CGContextBeginTransparencyLayer(context, nil);
+    CGContextDrawImage(context, drawRectFadeIn, fadeInImage);
     CGContextEndTransparencyLayer(context);
     
     CGColorSpaceRelease(rgbColorSpace);
@@ -680,7 +810,8 @@ BOOL const DefaultTransitionShouldAnimate = YES;
     
     CGContextDrawImage(context, drawRectBase, baseImage);
     
-    CGContextTranslateCTM(context, imageSize.width/2, imageSize.height);
+    
+    CGContextTranslateCTM(context, imageSize.width/2, imageSize.height); //平移坐标系 设置旋转的中心点
     CGContextRotateCTM(context, (180 * M_PI / 180));
 
     CGContextBeginTransparencyLayer(context, nil);

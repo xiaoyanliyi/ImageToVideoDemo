@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ImageToVideoDemo/ViewController.m"
-            timestampString = "557142898.2890559"
+            timestampString = "557154430.985221"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "374"
-            endingLineNumber = "374"
+            startingLineNumber = "375"
+            endingLineNumber = "375"
             landmarkName = "-testCompressionSession"
             landmarkType = "7">
          </BreakpointContent>
