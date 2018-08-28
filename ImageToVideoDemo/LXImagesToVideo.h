@@ -18,8 +18,9 @@ typedef enum {
     ImgToVideoTransitionAnimationLeftToRight = 0,   //下一张图片从左到右移入
     ImgToVideoTransitionAnimationLeftToRight2,      //本张图片从左到右移出
     ImgToVideoTransitionAnimationRightToLeft,       //下一张图片从右到左移入
-    ImgToVideoTransitionAnimationRightToLeft2       //本张图片从右到左移出
-
+    ImgToVideoTransitionAnimationRightToLeft2,      //本张图片从右到左移出
+    ImgToVideoTransitionAnimationZoomIn,            //下一张图片从中间放大
+    ImgToVideoTransitionAnimationZoomOut            //下一张图片缩小至中间
 } ImgToVideoTransitionAnimationType;
 
 typedef enum {
