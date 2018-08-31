@@ -11,17 +11,17 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVKit/AVKit.h>
+#import <Accelerate/Accelerate.h>
 
 @interface ViewController ()
 {
-//    NSArray *imageArr;//未压缩的图片
     NSMutableArray *imageArray;//经过压缩的图片
 }
 
 @property (nonatomic, strong) NSString *theVideoPath;
-@property (nonatomic, strong) NSString *HJVideoPath;
-@property (nonatomic, strong) NSString *HJAudioPath;
-@property (nonatomic, strong) NSString *HJOutputPath;
+@property (nonatomic, strong) NSString *videoPath;
+@property (nonatomic, strong) NSString *audioPath;
+@property (nonatomic, strong) NSString *outputPath;
 
 @end
 
@@ -37,6 +37,7 @@
     [button1 setTitle:@"视频播放"forState:UIControlStateNormal];
     [button1 addTarget:self action:@selector(playAction)forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button1];
+
     
     NSArray *imageArr = @[[UIImage imageNamed:@"IMG_4340.JPG"],[UIImage imageNamed:@"IMG_4341.JPG"],[UIImage imageNamed:@"IMG_4342.JPG"],
                           [UIImage imageNamed:@"IMG_4343.JPG"],[UIImage imageNamed:@"IMG_4344.JPG"],[UIImage imageNamed:@"IMG_4345.JPG"],
@@ -45,10 +46,15 @@
     
     for (int i = 0; i<imageArr.count; i++) {
         UIImage *imageNew = imageArr[i];
+        
+        
+        
+        
         //设置image的尺寸
         CGSize imagesize = imageNew.size;
-        imagesize.height =320;
-        imagesize.width =480;
+        NSLog(@"i = %d width = %f,  height = %f",i,imagesize.width,imagesize.height);
+        imagesize.height =480;
+        imagesize.width =640;
         //对图片大小进行压缩--
         imageNew = [self imageWithImage:imageNew scaledToSize:imagesize];
 //        imageNew = [ViewController getThumImgOfConextWithData:imageNew withMaxPixelSize:408];
@@ -56,16 +62,16 @@
     }
     
     NSArray *pathVideo =NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
-    self.HJVideoPath =[[pathVideo objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat:@"HJtest_%@.mp4",[NSDate date]]];
+    self.videoPath =[[pathVideo objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat:@"HJtest_%@.mp4",[NSDate date]]];
 
-    self.HJAudioPath =[[NSBundle mainBundle] pathForResource:@"黑白" ofType:@"mp3"];
+    self.audioPath =[[NSBundle mainBundle] pathForResource:@"黑白" ofType:@"mp3"];
     
     NSArray *pathOutput =NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
-    self.HJOutputPath =[[pathOutput objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat:@"HJoutput_%@.mov",[NSDate date]]];
+    self.outputPath =[[pathOutput objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat:@"HJoutput_%@.mov",[NSDate date]]];
     
     //图片合成视频
     [LXImagesToVideo videoFromImages:imageArray
-                              toPath:self.HJVideoPath
+                              toPath:self.videoPath
                   animateTransitions:YES
                    withCallbackBlock:^(BOOL success) {
                        if (success) {
@@ -93,12 +99,12 @@
 - (void)addBackGroundAudio {
     
     
-    NSURL * videoInputUrl = [NSURL fileURLWithPath:self.HJVideoPath];
-    NSURL * audioInputUrl = [NSURL fileURLWithPath:self.HJAudioPath];
+    NSURL * videoInputUrl = [NSURL fileURLWithPath:self.videoPath];
+    NSURL * audioInputUrl = [NSURL fileURLWithPath:self.audioPath];
 //    //合成之后的输出路径
 //    NSString *outPutPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"mergeVideo-%d.mov",arc4random() % 1000]];
     //混合后的视频输出路径
-    NSURL *outPutUrl = [NSURL fileURLWithPath:self.HJOutputPath];
+    NSURL *outPutUrl = [NSURL fileURLWithPath:self.outputPath];
 
     //时间起点
     CMTime nextClistartTime = kCMTimeZero;
@@ -215,9 +221,9 @@
 
 - (void)addBackGroundAudioTwo {
     
-    NSURL * videoInputUrl = [NSURL fileURLWithPath:self.HJVideoPath];
-    NSURL * audioInputUrl = [NSURL fileURLWithPath:self.HJAudioPath];
-    NSURL *outPutUrl = [NSURL fileURLWithPath:self.HJOutputPath];
+    NSURL * videoInputUrl = [NSURL fileURLWithPath:self.videoPath];
+    NSURL * audioInputUrl = [NSURL fileURLWithPath:self.audioPath];
+    NSURL *outPutUrl = [NSURL fileURLWithPath:self.outputPath];
     
     //声音来源路径（最终混合的音频）
     NSURL   *audio_inputFileUrl = audioInputUrl;
@@ -247,7 +253,7 @@
     //声音采集
     AVURLAsset* audioAsset =[[AVURLAsset alloc]initWithURL:audio_inputFileUrl options:nil];
     CMTimeRange audio_timeRange =CMTimeRangeMake(kCMTimeZero,videoAsset.duration);//声音长度截取范围==视频长度
-    AVMutableCompositionTrack*b_compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    AVMutableCompositionTrack *b_compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
     [b_compositionAudioTrack insertTimeRange:audio_timeRange ofTrack:[[audioAsset tracksWithMediaType:AVMediaTypeAudio]objectAtIndex:0] atTime:nextClipStartTime error:nil];
     
     //创建一个输出
@@ -265,29 +271,140 @@
 //            [theMovie.moviePlayer play];
 //        });
         //保存至相册
-        UISaveVideoAtPathToSavedPhotosAlbum(self.HJOutputPath, self, nil, nil);
+        UISaveVideoAtPathToSavedPhotosAlbum(self.outputPath, self, nil, nil);
 
      }];
     NSLog(@"完成！输出路径==%@",outputFileUrl);
 
 }
 
-//对图片尺寸进行压缩--
-
--(UIImage*)imageWithImage:(UIImage*)image scaledToSize:(CGSize)newSize
+//处理图片
+- (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize
 {
-    //    新创建的位图上下文 newSize为其大小
-    UIGraphicsBeginImageContext(newSize);
-    //    对图片进行尺寸的改变
-    [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
-    //    从当前上下文中获取一个UIImage对象  即获取新的图片对象
+    UIImage *baseImage = [self normalizedImage:image];
+    UIImage *gaussBgimage = [self imageWithGaussBlur:baseImage];
+    
+    UIGraphicsBeginImageContext(gaussBgimage.size);
+    
+    [gaussBgimage drawInRect:CGRectMake(0, 0, gaussBgimage.size.width, gaussBgimage.size.height)];
+    if ((baseImage.size.width / baseImage.size.height) > (newSize.width / newSize.height)) {
+        CGFloat changeHeight = (baseImage.size.height / baseImage.size.width) * newSize.width;
+        [baseImage drawInRect:CGRectMake(0, (newSize.height - changeHeight) / 2, newSize.width, changeHeight)];
+    }
+    else {
+        CGFloat changeWidth = (baseImage.size.width / baseImage.size.height) * newSize.height;
+        [baseImage drawInRect:CGRectMake((newSize.width - changeWidth) / 2, 0, changeWidth, newSize.height)];
+    }
     UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    // Return the new image.
     return newImage;
 }
 
-+ (UIImage*) getThumImgOfConextWithData:(UIImage*)img withMaxPixelSize:(int)maxPixelSize
+//转方向
+- (UIImage *)normalizedImage:(UIImage *)image {
+    if (image.imageOrientation == UIImageOrientationUp) return image;
+    
+    UIGraphicsBeginImageContextWithOptions(image.size, NO, image.scale);
+    [image drawInRect:(CGRect){0, 0, image.size}];
+    UIImage *normalizedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return normalizedImage;
+}
+
+- (UIImage *)imageWithGaussBlur:(UIImage *)image {
+    UIImage *gaussImg = [self blurryImage:image withBlurLevel:1.f];
+
+    CGSize newSize = CGSizeMake(640, 480);
+    UIGraphicsBeginImageContext(newSize);
+//    [gaussImg drawInRect:CGRectMake(-320,-240,newSize.width*2,newSize.height*2)];
+    [gaussImg drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
+
+    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
+
+- (UIImage *)coreBlurImage:(UIImage *)image
+            withBlurNumber:(CGFloat)blur {
+    //博客园-FlyElephant
+    CIContext *context = [CIContext contextWithOptions:nil];
+    CIImage  *inputImage=[CIImage imageWithCGImage:image.CGImage];
+    //设置filter
+    CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
+    [filter setValue:inputImage forKey:kCIInputImageKey];
+    [filter setValue:@(blur) forKey: @"inputRadius"];
+    //模糊图片
+    CIImage *result=[filter valueForKey:kCIOutputImageKey];
+    CGImageRef outImage=[context createCGImage:result fromRect:[result extent]];
+    UIImage *blurImage=[UIImage imageWithCGImage:outImage];
+    CGImageRelease(outImage);
+    return blurImage;
+}
+
+- (UIImage *)blurryImage:(UIImage *)image withBlurLevel:(CGFloat)blur {
+    if ((blur < 0.0f) || (blur > 1.0f)) {
+        blur = 0.5f;
+    }
+    
+    int boxSize = (int)(blur * 100);
+    boxSize -= (boxSize % 2) + 1;
+    
+    CGImageRef img = image.CGImage;
+    
+    vImage_Buffer inBuffer, outBuffer;
+    vImage_Error error;
+    void *pixelBuffer;
+    
+    CGDataProviderRef inProvider = CGImageGetDataProvider(img);
+    CFDataRef inBitmapData = CGDataProviderCopyData(inProvider);
+    
+    inBuffer.width = CGImageGetWidth(img);
+    inBuffer.height = CGImageGetHeight(img);
+    inBuffer.rowBytes = CGImageGetBytesPerRow(img);
+    inBuffer.data = (void*)CFDataGetBytePtr(inBitmapData);
+    
+    pixelBuffer = malloc(CGImageGetBytesPerRow(img) * CGImageGetHeight(img));
+    
+    outBuffer.data = pixelBuffer;
+    outBuffer.width = CGImageGetWidth(img);
+    outBuffer.height = CGImageGetHeight(img);
+    outBuffer.rowBytes = CGImageGetBytesPerRow(img);
+    
+    error = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, NULL,
+                                       0, 0, boxSize, boxSize, NULL,
+                                       kvImageEdgeExtend);
+    
+    if (error) {
+        NSLog(@"error from convolution %ld", error);
+    }
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef ctx = CGBitmapContextCreate(
+                                             outBuffer.data,
+                                             outBuffer.width,
+                                             outBuffer.height,
+                                             8,
+                                             outBuffer.rowBytes,
+                                             colorSpace,
+                                             CGImageGetBitmapInfo(image.CGImage));
+    
+    CGImageRef imageRef = CGBitmapContextCreateImage (ctx);
+    UIImage *returnImage = [UIImage imageWithCGImage:imageRef];
+    
+    CGContextRelease(ctx);
+    CGColorSpaceRelease(colorSpace);
+    
+    free(pixelBuffer);
+    CFRelease(inBitmapData);
+    
+    CGImageRelease(imageRef);
+    
+    return returnImage;
+}
+
+
++ (UIImage*)getThumImgOfConextWithData:(UIImage*)img withMaxPixelSize:(int)maxPixelSize
 {
     UIImage *imgResult = nil;
     if(img == nil)         { return imgResult; }
@@ -315,132 +432,14 @@
 }
 
 
--(void)testCompressionSession
-{
-    //设置mov路径
-    NSArray *paths =NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
-    NSString *moviePath =[[paths objectAtIndex:0]stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mov",@"test"]];
-    self.theVideoPath=moviePath;
-    
-    //定义视频的大小320 480 倍数
-    CGSize size =CGSizeMake(320,480);
-    
-    //        [selfwriteImages:imageArr ToMovieAtPath:moviePath withSize:sizeinDuration:4 byFPS:30];//第2中方法
-    
-    NSError *error =nil;
-    //    转成UTF-8编码
-    unlink([moviePath UTF8String]);
-    NSLog(@"path->%@",moviePath);
-    //     iphone提供了AVFoundation库来方便的操作多媒体设备，AVAssetWriter这个类可以方便的将图像和音频写成一个完整的视频文件
-    AVAssetWriter *videoWriter = [[AVAssetWriter alloc] initWithURL:[NSURL fileURLWithPath:moviePath] fileType:AVFileTypeQuickTimeMovie error:&error];
-    
-    NSParameterAssert(videoWriter);
-    if(error)
-        NSLog(@"error =%@", [error localizedDescription]);
-    //mov的格式设置 编码格式 宽度 高度
-    NSDictionary *videoSettings =[NSDictionary dictionaryWithObjectsAndKeys:AVVideoCodecH264,AVVideoCodecKey,
-                                  [NSNumber numberWithInt:size.width],AVVideoWidthKey,
-                                  [NSNumber numberWithInt:size.height],AVVideoHeightKey,nil];
-    
-    AVAssetWriterInput *writerInput =[AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeVideo outputSettings:videoSettings];
-    
-    NSDictionary*sourcePixelBufferAttributesDictionary =[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:kCVPixelFormatType_32ARGB],kCVPixelBufferPixelFormatTypeKey,nil];
-    //    AVAssetWriterInputPixelBufferAdaptor提供CVPixelBufferPool实例,
-    //    可以使用分配像素缓冲区写入输出文件。使用提供的像素为缓冲池分配通常
-    //    是更有效的比添加像素缓冲区分配使用一个单独的池
-    AVAssetWriterInputPixelBufferAdaptor *adaptor =[AVAssetWriterInputPixelBufferAdaptor assetWriterInputPixelBufferAdaptorWithAssetWriterInput:writerInput sourcePixelBufferAttributes:sourcePixelBufferAttributesDictionary];
-    
-    NSParameterAssert(writerInput);
-    NSParameterAssert([videoWriter canAddInput:writerInput]);
-    
-    if ([videoWriter canAddInput:writerInput])
-    {
-        NSLog(@"11111");
-    }
-    else
-    {
-        NSLog(@"22222");
-    }
-    
-    [videoWriter addInput:writerInput];
-    
-    [videoWriter startWriting];
-    [videoWriter startSessionAtSourceTime:kCMTimeZero];
-    
-    //合成多张图片为一个视频文件
-    dispatch_queue_t dispatchQueue =dispatch_queue_create("mediaInputQueue",NULL);
-    int __block frame =0;
-    [writerInput requestMediaDataWhenReadyOnQueue:dispatchQueue usingBlock:^{
-        
-        while([writerInput isReadyForMoreMediaData])
-        {
-            if(++frame >=[imageArray count]*10)
-            {
-                [writerInput markAsFinished];
-                [videoWriter finishWriting];
-                //              [videoWriterfinishWritingWithCompletionHandler:nil];
-                break;
-            }
-            CVPixelBufferRef buffer =NULL;
-            int idx =frame/10;
-            NSLog(@"idx==%d",idx);
-            buffer = (CVPixelBufferRef)[self pixelBufferFromCGImage:[[imageArray objectAtIndex:idx] CGImage] size:size];
-            
-            if (buffer)
-            {
-                if(![adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(frame,30)])//设置每秒钟播放图片的个数
-                {
-                    NSLog(@"FAIL");
-                }
-                else
-                {
-                    NSLog(@"OK");
-                }
-                
-                CFRelease(buffer);
-            }
-        }
-    }];
-    
-}
 
-- (CVPixelBufferRef)pixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size
-{
-    NSDictionary *options =[NSDictionary dictionaryWithObjectsAndKeys:
-                            [NSNumber numberWithBool:YES],kCVPixelBufferCGImageCompatibilityKey,
-                            [NSNumber numberWithBool:YES],kCVPixelBufferCGBitmapContextCompatibilityKey,nil];
-    CVPixelBufferRef pxbuffer =NULL;
-    CVReturn status =CVPixelBufferCreate(kCFAllocatorDefault,size.width,size.height,kCVPixelFormatType_32ARGB,(__bridge CFDictionaryRef) options,&pxbuffer);
-    
-    NSParameterAssert(status ==kCVReturnSuccess && pxbuffer !=NULL);
-    
-    CVPixelBufferLockBaseAddress(pxbuffer,0);
-    
-    void *pxdata =CVPixelBufferGetBaseAddress(pxbuffer);
-    NSParameterAssert(pxdata !=NULL);
-    CGColorSpaceRef rgbColorSpace=CGColorSpaceCreateDeviceRGB();
-    //    当你调用这个函数的时候，Quartz创建一个位图绘制环境，也就是位图上下文。当你向上下文中绘制信息时，Quartz把你要绘制的信息作为位图数据绘制到指定的内存块。一个新的位图上下文的像素格式由三个参数决定：每个组件的位数，颜色空间，alpha选项
-    CGContextRef context =CGBitmapContextCreate(pxdata,size.width,size.height,8,4*size.width,rgbColorSpace,kCGImageAlphaPremultipliedFirst);
-    NSParameterAssert(context);
-    
-    //使用CGContextDrawImage绘制图片  这里设置不正确的话 会导致视频颠倒
-    //    当通过CGContextDrawImage绘制图片到一个context中时，如果传入的是UIImage的CGImageRef，因为UIKit和CG坐标系y轴相反，所以图片绘制将会上下颠倒
-    CGContextDrawImage(context,CGRectMake(0,0,CGImageGetWidth(image),CGImageGetHeight(image)), image);
-    // 释放色彩空间
-    CGColorSpaceRelease(rgbColorSpace);
-    // 释放context
-    CGContextRelease(context);
-    // 解锁pixel buffer
-    CVPixelBufferUnlockBaseAddress(pxbuffer,0);
-    
-    return pxbuffer;
-}
+
 
 //播放
 -(void)playAction
 {
-//    NSLog(@"************%@",self.HJOutputPath);
-//    NSURL *sourceMovieURL = [NSURL fileURLWithPath:self.HJOutputPath];
+//    NSLog(@"************%@",self.outputPath);
+//    NSURL *sourceMovieURL = [NSURL fileURLWithPath:self.outputPath];
 //    AVAsset *movieAsset = [AVURLAsset URLAssetWithURL:sourceMovieURL options:nil];
 //    AVPlayerItem *playerItem = [AVPlayerItem playerItemWithAsset:movieAsset];
 //    AVPlayer *player = [AVPlayer playerWithPlayerItem:playerItem];
@@ -450,7 +449,7 @@
 //    [self.view.layer addSublayer:playerLayer];
 //    [player play];
     
-    MPMoviePlayerViewController *theMovie =[[MPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:self.HJOutputPath]];
+    MPMoviePlayerViewController *theMovie =[[MPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:self.outputPath]];
     [self presentMoviePlayerViewControllerAnimated:theMovie];
     theMovie.moviePlayer.movieSourceType=MPMovieSourceTypeFile;
     [theMovie.moviePlayer play];
