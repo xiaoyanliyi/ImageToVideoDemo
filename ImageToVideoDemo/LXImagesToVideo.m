@@ -11,7 +11,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
-CGSize const DefaultFrameSize                             = (CGSize){640, 480};
+CGSize const DefaultFrameSize                             = (CGSize){720, 480};
 
 NSInteger const DefaultShowPicSecond                      = 2;
 NSInteger const DefaultFrameRate                          = 1;

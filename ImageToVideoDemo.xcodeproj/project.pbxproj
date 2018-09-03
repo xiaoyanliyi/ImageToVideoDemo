@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		E9809549212FEB7D0022C3C6 /* LXImagesToVideo.m in Sources */ = {isa = PBXBuildFile; fileRef = E9809547212FE9880022C3C6 /* LXImagesToVideo.m */; };
+		E9809552213945350022C3C6 /* house3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E980954A213945320022C3C6 /* house3.jpg */; };
+		E9809553213945350022C3C6 /* house2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E980954B213945330022C3C6 /* house2.jpg */; };
+		E9809554213945350022C3C6 /* house6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E980954C213945330022C3C6 /* house6.jpg */; };
+		E9809555213945350022C3C6 /* house5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E980954D213945330022C3C6 /* house5.jpg */; };
+		E9809556213945350022C3C6 /* house1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E980954E213945330022C3C6 /* house1.jpg */; };
+		E9809557213945350022C3C6 /* house8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E980954F213945340022C3C6 /* house8.jpg */; };
+		E9809558213945350022C3C6 /* house7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E9809550213945340022C3C6 /* house7.jpg */; };
+		E9809559213945350022C3C6 /* house4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E9809551213945340022C3C6 /* house4.jpg */; };
 		E9D9E3CF212677A4008B8B7A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D9E3CE212677A4008B8B7A /* AppDelegate.m */; };
 		E9D9E3D2212677A4008B8B7A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D9E3D1212677A4008B8B7A /* ViewController.m */; };
 		E9D9E3D5212677A4008B8B7A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E9D9E3D3212677A4008B8B7A /* Main.storyboard */; };
@@ -54,6 +62,14 @@
 /* Begin PBXFileReference section */
 		E9809546212FE9880022C3C6 /* LXImagesToVideo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LXImagesToVideo.h; sourceTree = "<group>"; };
 		E9809547212FE9880022C3C6 /* LXImagesToVideo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LXImagesToVideo.m; sourceTree = "<group>"; };
+		E980954A213945320022C3C6 /* house3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = house3.jpg; sourceTree = "<group>"; };
+		E980954B213945330022C3C6 /* house2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = house2.jpg; sourceTree = "<group>"; };
+		E980954C213945330022C3C6 /* house6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = house6.jpg; sourceTree = "<group>"; };
+		E980954D213945330022C3C6 /* house5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = house5.jpg; sourceTree = "<group>"; };
+		E980954E213945330022C3C6 /* house1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = house1.jpg; sourceTree = "<group>"; };
+		E980954F213945340022C3C6 /* house8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = house8.jpg; sourceTree = "<group>"; };
+		E9809550213945340022C3C6 /* house7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = house7.jpg; sourceTree = "<group>"; };
+		E9809551213945340022C3C6 /* house4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = house4.jpg; sourceTree = "<group>"; };
 		E9D9E3CA212677A4008B8B7A /* ImageToVideoDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageToVideoDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9D9E3CD212677A4008B8B7A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E9D9E3CE212677A4008B8B7A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -189,6 +205,14 @@
 				E9D9E40421267B13008B8B7A /* IMG_4349.JPG */,
 				E9D9E40221267B13008B8B7A /* IMG_4350.JPG */,
 				E9D9E40721267B14008B8B7A /* IMG_4351.JPG */,
+				E980954E213945330022C3C6 /* house1.jpg */,
+				E980954B213945330022C3C6 /* house2.jpg */,
+				E980954A213945320022C3C6 /* house3.jpg */,
+				E9809551213945340022C3C6 /* house4.jpg */,
+				E980954D213945330022C3C6 /* house5.jpg */,
+				E980954C213945330022C3C6 /* house6.jpg */,
+				E9809550213945340022C3C6 /* house7.jpg */,
+				E980954F213945340022C3C6 /* house8.jpg */,
 				E9D9E425212AAC39008B8B7A /* 黑白.mp3 */,
 			);
 			path = Image;
@@ -308,20 +332,28 @@
 			buildActionMask = 2147483647;
 			files = (
 				E9D9E3DA212677A6008B8B7A /* LaunchScreen.storyboard in Resources */,
+				E9809559213945350022C3C6 /* house4.jpg in Resources */,
+				E9809557213945350022C3C6 /* house8.jpg in Resources */,
+				E9809556213945350022C3C6 /* house1.jpg in Resources */,
+				E9809558213945350022C3C6 /* house7.jpg in Resources */,
 				E9D9E3D7212677A6008B8B7A /* Assets.xcassets in Resources */,
 				E9D9E426212AAC39008B8B7A /* 黑白.mp3 in Resources */,
+				E9809553213945350022C3C6 /* house2.jpg in Resources */,
 				E9D9E41721267B14008B8B7A /* IMG_4342.JPG in Resources */,
 				E9D9E41421267B14008B8B7A /* IMG_4344.JPG in Resources */,
 				E9D9E41621267B14008B8B7A /* IMG_4345.JPG in Resources */,
 				E9D9E41221267B14008B8B7A /* IMG_4340.JPG in Resources */,
 				E9D9E41121267B14008B8B7A /* IMG_4341.JPG in Resources */,
+				E9809554213945350022C3C6 /* house6.jpg in Resources */,
 				E9D9E41321267B14008B8B7A /* IMG_4351.JPG in Resources */,
+				E9809552213945350022C3C6 /* house3.jpg in Resources */,
 				E9D9E40D21267B14008B8B7A /* IMG_4343.JPG in Resources */,
 				E9D9E41021267B14008B8B7A /* IMG_4349.JPG in Resources */,
 				E9D9E40C21267B14008B8B7A /* IMG_4348.JPG in Resources */,
 				E9D9E41521267B14008B8B7A /* IMG_4347.JPG in Resources */,
 				E9D9E3D5212677A4008B8B7A /* Main.storyboard in Resources */,
 				E9D9E40E21267B14008B8B7A /* IMG_4350.JPG in Resources */,
+				E9809555213945350022C3C6 /* house5.jpg in Resources */,
 				E9D9E40F21267B14008B8B7A /* IMG_4346.JPG in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
