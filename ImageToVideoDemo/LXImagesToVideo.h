@@ -15,88 +15,48 @@
 
 typedef enum {
     //转场动画
-    ImgToVideoTransitionAnimationLeftToRight = 0,   //下一张图片从左到右移入
-    ImgToVideoTransitionAnimationLeftToRight2,      //本张图片从左到右移出
-    ImgToVideoTransitionAnimationRightToLeft,       //下一张图片从右到左移入
-    ImgToVideoTransitionAnimationRightToLeft2,      //本张图片从右到左移出
-    ImgToVideoTransitionAnimationZoomIn,            //下一张图片从中间放大
-    ImgToVideoTransitionAnimationZoomOut            //下一张图片缩小至中间
+    ImgToVideoTransitionAnimationFade = 0,              //淡入淡出
+    ImgToVideoTransitionAnimationLeftToRight = 1,       //从左到右移入
+    ImgToVideoTransitionAnimationRightToLeft = 2,       //从右到左移入
+    ImgToVideoTransitionAnimationZoomIn = 3,            //放大
+    ImgToVideoTransitionAnimationZoomOut = 4,           //缩小
+    ImgToVideoTransitionAnimationTopRotate = 5          //顶部旋转
+
 } ImgToVideoTransitionAnimationType;
 
 typedef enum {
     //播放动画
-    ImgToVideoWaitAnimationZoomIn = 0,              //放大
-    ImgToVideoWaitAnimationZoomOut,                 //缩小
-    ImgToVideoWaitAnimationRightToLeft,             //图片从右至左缓慢移动
-    ImgToVideoWaitAnimationLeftToRight              //图片从左至右缓慢移动
+    ImgToVideoWaitAnimationZoomIn = 0,                  //放大
+    ImgToVideoWaitAnimationZoomOut = 1,                 //缩小
+    ImgToVideoWaitAnimationRightToLeft = 2,             //从右至左缓慢移动
+    ImgToVideoWaitAnimationLeftToRight = 3,             //从左至右缓慢移动
+    ImgToVideoWaitAnimationTopToButtom = 4,             //从上至下缓慢移动
+    ImgToVideoWaitAnimationButtomToTop = 5              //从下至上缓慢移动
 
-} ImgToVideoWaitAnimationType;
-
-
-FOUNDATION_EXPORT BOOL const DefaultTransitionShouldAnimate;
-FOUNDATION_EXPORT CGSize const DefaultFrameSize;
-FOUNDATION_EXPORT NSInteger const DefaultFrameRate;
-FOUNDATION_EXPORT NSInteger const TransitionFrameCount;
-FOUNDATION_EXPORT NSInteger const FramesToWaitBeforeTransition;
+} ImgToVideoPlayAnimationType;
 
 
 typedef void(^SuccessBlock)(BOOL success);
 
+@interface LXVideoParameter : NSObject
+
+@property (nonatomic, assign) NSInteger showPicSecond;              //每张图片播放时间 默认2秒
+@property (nonatomic, assign) NSInteger frameRate;                  //1
+@property (nonatomic, assign) NSInteger transitionFrameCount;       //每秒帧数 默认60
+@property (nonatomic, assign) NSInteger crossTransition;            //转场动画帧数 默认20
+@property (nonatomic, assign) BOOL transitionShouldAnimate;         //是否显示转场动画
+@property (nonatomic, assign) CGSize frameSize;
+@property (nonatomic, copy  ) NSString *videoPathStr;
+@property (nonatomic, assign) CGFloat zoomRate;                     //放大、缩小系数 默认0.04
+
+@end
 
 @interface LXImagesToVideo : NSObject
 
-
-+ (void)videoFromImages:(NSArray *)images
-                 toPath:(NSString *)path
-               withSize:(CGSize)size
-                withFPS:(int)fps
-     animateTransitions:(BOOL)animate
-      withCallbackBlock:(SuccessBlock)callbackBlock;
-
-+ (void)videoFromImages:(NSArray *)images
-                 toPath:(NSString *)path
-                withFPS:(int)fps
-     animateTransitions:(BOOL)animate
-      withCallbackBlock:(SuccessBlock)callbackBlock;
-
-+ (void)videoFromImages:(NSArray *)images
-                 toPath:(NSString *)path
-               withSize:(CGSize)size
-     animateTransitions:(BOOL)animate
-      withCallbackBlock:(SuccessBlock)callbackBlock;
-
-+ (void)videoFromImages:(NSArray *)images
-                 toPath:(NSString *)path
-     animateTransitions:(BOOL)animate
-      withCallbackBlock:(SuccessBlock)callbackBlock;
-
-+ (void)videoFromImages:(NSArray *)images
-                 toPath:(NSString *)path
-      withCallbackBlock:(SuccessBlock)callbackBlock;
-
-
-+ (void)saveVideoToPhotosWithImages:(NSArray *)images
-                           withSize:(CGSize)size
-                            withFPS:(int)fps
-                 animateTransitions:(BOOL)animate
-                  withCallbackBlock:(SuccessBlock)callbackBlock;
-
-+ (void)saveVideoToPhotosWithImages:(NSArray *)images
-                           withSize:(CGSize)size
-                 animateTransitions:(BOOL)animate
-                  withCallbackBlock:(SuccessBlock)callbackBlock;
-
-+ (void)saveVideoToPhotosWithImages:(NSArray *)images
-                            withFPS:(int)fps
-                 animateTransitions:(BOOL)animate
-                  withCallbackBlock:(SuccessBlock)callbackBlock;
-
-+ (void)saveVideoToPhotosWithImages:(NSArray *)images
-                 animateTransitions:(BOOL)animate
-                  withCallbackBlock:(SuccessBlock)callbackBlock;
-
-+ (void)saveVideoToPhotosWithImages:(NSArray *)images
-                  withCallbackBlock:(SuccessBlock)callbackBlock;
-
++ (void)writeImageAsMovie:(NSArray *)imageArray
+            playAnimation:(NSArray *)playAnimationArray
+           crossAnimation:(NSArray *)crossAnimationArray
+           videoParamater:(LXVideoParameter *)param
+        withCallbackBlock:(SuccessBlock)callbackBlock;
 
 @end
